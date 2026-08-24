@@ -7,58 +7,17 @@
     <style>
         *{box-sizing:border-box; font-family:Arial, sans-serif;}
         body{max-width:700px; margin:0 auto; padding:20px; background:#f5f5f5;}
-        /* ---------- PASSWORD SCREEN ---------- */
-        #passwordScreen{
-            position:fixed;
-            top:0; left:0; width:100%; height:100%;
-            background:linear-gradient(135deg,#2e7d32,#558b2f);
-            display:flex; align-items:center; justify-content:center;
-            z-index:9999;
-            padding:20px;
-        }
-        .password-card{
-            background:white;
-            padding:35px 30px;
-            border-radius:12px;
-            box-shadow:0 4px 20px rgba(0,0,0,0.2);
-            width:100%;
-            max-width:400px;
-            text-align:center;
-        }
+        #passwordScreen{position:fixed; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg,#2e7d32,#558b2f); display:flex; align-items:center; justify-content:center; z-index:9999; padding:20px;}
+        .password-card{background:white; padding:35px 30px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.2); width:100%; max-width:400px; text-align:center;}
         .password-card h2{color:#2e7d32; margin-top:0; font-size:26px;}
-        .password-card input{
-            width:100%;
-            padding:14px;
-            font-size:18px;
-            border:2px solid #ccc;
-            border-radius:8px;
-            margin:15px 0;
-            text-align:center;
-        }
-        .password-card button{
-            background:#2e7d32;
-            color:white;
-            border:none;
-            padding:14px 30px;
-            font-size:18px;
-            border-radius:8px;
-            width:100%;
-            cursor:pointer;
-            font-weight:bold;
-        }
+        .password-card input{width:100%; padding:14px; font-size:18px; border:2px solid #ccc; border-radius:8px; margin:15px 0; text-align:center;}
+        .password-card button{background:#2e7d32; color:white; border:none; padding:14px 30px; font-size:18px; border-radius:8px; width:100%; cursor:pointer; font-weight:bold;}
         .password-card button:active{background:#256628;}
         #passMessage{margin-top:12px; font-size:16px; min-height:24px;}
         .error{color:#c62828;}
         .success{color:#2e7d32; font-weight:bold;}
-        /* ---------- MAIN FORM ---------- */
         #mainContent{display:none;}
-        .header{
-            background:linear-gradient(90deg,#2e7d32,#558b2f);
-            color:white;
-            padding:20px;
-            border-radius:10px;
-            text-align:center;
-        }
+        .header{background:linear-gradient(90deg,#2e7d32,#558b2f); color:white; padding:20px; border-radius:10px; text-align:center;}
         .section{background:white; padding:20px; margin:15px 0; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08);}
         .deadline{background:#fff3cd; border-left:4px solid #ffc107; padding:12px; border-radius:6px; margin-bottom:15px;}
         .closed{opacity:0.4; background:#ffebee; border-left:4px solid #ef5350;}
@@ -68,56 +27,18 @@
         button[type="submit"]:active{background:#256628;}
         .veg{color:#2e7d32; font-weight:500;}
         .note{font-size:0.9em; color:#666; margin-top:8px;}
-        .meal-options{
-            background:#fafafa; border-radius:8px; padding:12px 15px; margin:10px 0; border-left:3px solid #e0e0e0;
-        }
+        .meal-options{background:#fafafa; border-radius:8px; padding:12px 15px; margin:10px 0; border-left:3px solid #e0e0e0;}
         .meal-option{padding:8px 0; border-bottom:1px solid #eee; font-size:15px;}
         .meal-option:last-child{border-bottom:none;}
         .meal-icon{font-size:20px; margin-right:10px;}
-        /* ---------- REFERRAL SECTION — DISTINCT STYLE ---------- */
-        .referral-section{
-            background:#e3f2fd;
-            border: 3px solid #1976d2;
-            padding:25px;
-            margin:25px 0 15px;
-            border-radius:12px;
-            box-shadow:0 4px 12px rgba(25,118,210,0.15);
-        }
-        .referral-section h3{
-            color:#1976d2;
-            margin-top:0;
-            font-size:19px;
-        }
-        .referral-note{
-            background:#fff;
-            border-left:3px solid #1976d2;
-            padding:10px 12px;
-            border-radius:6px;
-            margin:10px 0 15px;
-            font-size:15px;
-        }
-        .referral-checkbox{
-            margin:15px 0;
-        }
-        .referral-checkbox input[type="checkbox"]{
-            width:auto;
-            transform:scale(1.3);
-            margin-right:10px;
-        }
-        .referral-fields{
-            display:none;
-            padding-top:10px;
-            border-top:1px dashed #90caf9;
-            margin-top:10px;
-        }
-        /* ---------- CONFIRMATION SCREEN ---------- */
-        #confirmationScreen{
-            display:none; text-align:center; padding:60px 20px;
-        }
-        .confirmation-card{
-            background:white; padding:40px 30px; border-radius:12px;
-            box-shadow:0 4px 20px rgba(0,0,0,0.15); max-width:450px; margin:0 auto;
-        }
+        .referral-section{background:#e3f2fd; border:3px solid #1976d2; padding:25px; margin:25px 0 15px; border-radius:12px; box-shadow:0 4px 12px rgba(25,118,210,0.15);}
+        .referral-section h3{color:#1976d2; margin-top:0; font-size:19px;}
+        .referral-note{background:#fff; border-left:3px solid #1976d2; padding:10px 12px; border-radius:6px; margin:10px 0 15px; font-size:15px;}
+        .referral-checkbox{margin:15px 0;}
+        .referral-checkbox input[type="checkbox"]{width:auto; transform:scale(1.3); margin-right:10px;}
+        .referral-fields{display:none; padding-top:10px; border-top:1px dashed #90caf9; margin-top:10px;}
+        #confirmationScreen{display:none; text-align:center; padding:60px 20px;}
+        .confirmation-card{background:white; padding:40px 30px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.15); max-width:450px; margin:0 auto;}
         .confirmation-card h1{color:#2e7d32; font-size:32px; margin-bottom:10px;}
         .confirmation-card p{font-size:17px; color:#444; line-height:1.6;}
         .confirmation-card .icon{font-size:60px; margin-bottom:15px;}
@@ -125,7 +46,6 @@
     </style>
 </head>
 <body>
-<!-- ============= PASSWORD SCREEN ============= -->
 <div id="passwordScreen">
     <div class="password-card">
         <h2>🔒 InnerCity Life</h2>
@@ -135,7 +55,6 @@
         <div id="passMessage"></div>
     </div>
 </div>
-<!-- ============= MAIN FORM ============= -->
 <div id="mainContent">
     <div class="header">
         <h1>🍲 Weekly Hot Meal Booking</h1>
@@ -226,7 +145,6 @@
             <label>Allergies / Dietary Requirements</label>
             <textarea id="allergies" rows="3" placeholder="Please list any allergies or special needs..."></textarea>
         </div>
-        <!-- ========== REFERRAL SECTION — SEPARATE DISTINCT BOX ========== -->
         <div class="referral-section">
             <h3>🔎 Do you know someone who needs accommodation?</h3>
             <div class="referral-note">
@@ -243,11 +161,9 @@
                 <input type="tel" id="referralPhone" placeholder="e.g. 07700 900123">
             </div>
         </div>
-        <!-- ========== END OF REFERRAL SECTION ========== -->
         <button type="submit">✅ Submit Booking</button>
     </form>
 </div>
-<!-- ============= CONFIRMATION SCREEN ============= -->
 <div id="confirmationScreen">
     <div class="confirmation-card">
         <div class="icon">✅</div>
@@ -257,23 +173,21 @@
     </div>
 </div>
 <script>
-// ==================================================
 const CURRENT_PASSWORD = "meals2026";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFb24ZSQeHnH7ztgagUwBxpiFNp8cGj6Lkql5bLxqkurY6kh6RUmqs2YIPdRmqIkrY/exec";
-// ==================================================
 const passwordScreen = document.getElementById("passwordScreen");
 const mainContent = document.getElementById("mainContent");
 const confirmationScreen = document.getElementById("confirmationScreen");
 const passInput = document.getElementById("accessPassword");
 const unlockBtn = document.getElementById("unlockButton");
 const passMessage = document.getElementById("passMessage");
-// ========== TOGGLE REFERRAL FIELDS ==========
+
 function toggleReferralFields(){
     const checkbox = document.getElementById("knowsReferral");
     const fields = document.getElementById("referralFields");
     fields.style.display = checkbox.checked ? "block" : "none";
 }
-// ========== UNLOCK FUNCTION ==========
+
 function attemptUnlock(){
     passMessage.innerHTML = "";
     const entered = passInput.value.trim();
@@ -282,7 +196,6 @@ function attemptUnlock(){
         return;
     }
     if (entered === CURRENT_PASSWORD) {
-        // ✅ CORRECT PASSWORD
         passMessage.innerHTML = "<span class='success'>✅ Correct! Opening...</span>";
         setTimeout(function(){
             passwordScreen.style.display = "none";
@@ -290,21 +203,19 @@ function attemptUnlock(){
             applyCutoff();
         }, 600);
     } else {
-        // ❌ WRONG PASSWORD
         passMessage.innerHTML = "<span class='error'>❌ Incorrect password. Please try again.</span>";
         passInput.value = "";
     }
 }
-// Click button to unlock
+
 unlockBtn.addEventListener("click", attemptUnlock);
-// Press Enter/Go on keyboard to unlock
 passInput.addEventListener("keydown", function(e){
     if (e.key === "Enter" || e.key === "Go") {
         e.preventDefault();
         attemptUnlock();
     }
 });
-// ========== FORM SUBMISSION — iPhone-compatible version ==========
+
 document.getElementById("bookingForm").addEventListener("submit", async function(e){
     e.preventDefault();
     const knowsReferral = document.getElementById("knowsReferral").checked;
@@ -329,21 +240,18 @@ document.getElementById("bookingForm").addEventListener("submit", async function
         Object.keys(orderData).forEach(key => {
             formData.append(key, orderData[key]);
         });
-
         await fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
             body: formData
         });
-
         mainContent.style.display = "none";
         confirmationScreen.style.display = "block";
-
     } catch (error) {
         alert("⚠️ Something went wrong. Please try again or contact us.");
         console.error(error);
     }
 });
-// ========== CUTOFF LOGIC ==========
+
 function isBookingOpenFor(mealDayOffset, cutoffDayOffset) {
     const now = new Date();
     const deadline = new Date();
@@ -354,12 +262,14 @@ function isBookingOpenFor(mealDayOffset, cutoffDayOffset) {
     if (daysUntilCutoff === 0) return now < deadline;
     return daysUntilCutoff > 0;
 }
+
 const mealRules = {
     mon: {mealDay:1, cutoffDay:0, label:"Monday", cutoffLabel:"Sunday 12:00 noon"},
     wed: {mealDay:3, cutoffDay:2, label:"Wednesday", cutoffLabel:"Tuesday 12:00 noon"},
     fri: {mealDay:5, cutoffDay:4, label:"Friday", cutoffLabel:"Thursday 12:00 noon"},
     sat: {mealDay:6, cutoffDay:5, label:"Saturday", cutoffLabel:"Friday 12:00 noon"},
 };
+
 function applyCutoff() {
     const sections = [
         {id:"mon", sectionId:"monSection", selectId:"monday"},
