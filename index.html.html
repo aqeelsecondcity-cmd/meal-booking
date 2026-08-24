@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnerCity Life — Meal Booking</title>
+    <style>
+        *{box-sizing:border-box; font-family:Arial, sans-serif;}
+        body{max-width:700px; margin:0 auto; padding:20px; background:#f5f5f5;}
+        /* ---------- PASSWORD SCREEN ---------- */
+        #passwordScreen{
+            position:fixed;
+            top:0; left:0; width:100%; height:100%;
+            background:linear-gradient(135deg,#2e7d32,#558b2f);
+            display:flex; align-items:center; justify-content:center;
+            z-index:9999;
+            padding:20px;
+        }
+        .password-card{
+            background:white;
+            padding:35px 30px;
+            border-radius:12px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.2);
+            width:100%;
+            max-width:400px;
+            text-align:center;
+        }
+        .password-card h2{color:#2e7d32; margin-top:0; font-size:26px;}
+        .password-card input{
+            width:100%;
+            padding:14px;
+            font-size:18px;
+            border:2px solid #ccc;
+            border-radius:8px;
+            margin:15px 0;
+            text-align:center;
+        }
+        .password-card button{
+            background:#2e7d32;
+            color:white;
+            border:none;
+            padding:14px 30px;
+            font-size:18px;
+            border-radius:8px;
+            width:100%;
+            cursor:pointer;
+            font-weight:bold;
+        }
+        .password-card button:active{background:#256628;}
+        #passMessage{margin-top:12px; font-size:16px; min-height:24px;}
+        .error{color:#c62828;}
+        .success{color:#2e7d32; font-weight:bold;}
+        /* ---------- MAIN FORM ---------- */
+        #mainContent{display:none;}
+        .header{
+            background:linear-gradient(90deg,#2e7d32,#558b2f);
+            color:white;
+            padding:20px;
+            border-radius:10px;
+            text-align:center;
+        }
+        .section{background:white; padding:20px; margin:15px 0; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+        .deadline{background:#fff3cd; border-left:4px solid #ffc107; padding:12px; border-radius:6px; margin-bottom:15px;}
+        .closed{opacity:0.4; background:#ffebee; border-left:4px solid #ef5350;}
+        label{display:block; margin:12px 0 4px; font-weight:600;}
+        input, select, textarea{width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; font-size:16px;}
+        button[type="submit"]{background:#2e7d32; color:white; border:none; padding:14px; font-size:18px; border-radius:8px; width:100%; margin-top:15px; cursor:pointer; font-weight:bold;}
+        button[type="submit"]:active{background:#256628;}
+        .veg{color:#2e7d32; font-weight:500;}
+        .note{font-size:0.9em; color:#666; margin-top:8px;}
+        .meal-options{
+            background:#fafafa; border-radius:8px; padding:12px 15px; margin:10px 0; border-left:3px solid #e0e0e0;
+        }
+        .meal-option{padding:8px 0; border-bottom:1px solid #eee; font-size:15px;}
+        .meal-option:last-child{border-bottom:none;}
+        .meal-icon{font-size:20px; margin-right:10px;}
+        /* ---------- REFERRAL SECTION — DISTINCT STYLE ---------- */
+        .referral-section{
+            background:#e3f2fd;
+            border: 3px solid #1976d2;
+            padding:25px;
+            margin:25px 0 15px;
+            border-radius:12px;
+            box-shadow:0 4px 12px rgba(25,118,210,0.15);
+        }
+        .referral-section h3{
+            color:#1976d2;
+            margin-top:0;
+            font-size:19px;
+        }
+        .referral-note{
+            background:#fff;
+            border-left:3px solid #1976d2;
+            padding:10px 12px;
+            border-radius:6px;
+            margin:10px 0 15px;
+            font-size:15px;
+        }
+        .referral-checkbox{
+            margin:15px 0;
+        }
+        .referral-checkbox input[type="checkbox"]{
+            width:auto;
+            transform:scale(1.3);
+            margin-right:10px;
+        }
+        .referral-fields{
+            display:none;
+            padding-top:10px;
+            border-top:1px dashed #90caf9;
+            margin-top:10px;
+        }
+        /* ---------- CONFIRMATION SCREEN ---------- */
+        #confirmationScreen{
+            display:none; text-align:center; padding:60px 20px;
+        }
+        .confirmation-card{
+            background:white; padding:40px 30px; border-radius:12px;
+            box-shadow:0 4px 20px rgba(0,0,0,0.15); max-width:450px; margin:0 auto;
+        }
+        .confirmation-card h1{color:#2e7d32; font-size:32px; margin-bottom:10px;}
+        .confirmation-card p{font-size:17px; color:#444; line-height:1.6;}
+        .confirmation-card .icon{font-size:60px; margin-bottom:15px;}
+        .confirmation-card .divider{height:3px; background:linear-gradient(90deg,#2e7d32,#558b2f); border-radius:3px; margin:20px 0;}
+    </style>
+</head>
+<body>
+<!-- ============= PASSWORD SCREEN ============= -->
+<div id="passwordScreen">
+    <div class="password-card">
+        <h2>🔒 InnerCity Life</h2>
+        <p>Enter the booking password to continue</p>
+        <input type="password" id="accessPassword" placeholder="Enter password...">
+        <button id="unlockButton">Unlock Booking</button>
+        <div id="passMessage"></div>
+    </div>
+</div>
+<!-- ============= MAIN FORM ============= -->
+<div id="mainContent">
+    <div class="header">
+        <h1>🍲 Weekly Hot Meal Booking</h1>
+        <p>Fresh, Nutritious — Made with Care</p>
+    </div>
+    <div class="section deadline">
+        <strong>⏰ Booking Deadline:</strong> Orders must be placed by <strong>12:00 noon the day before</strong> the meal day.<br>
+        <span class="note">Example: Order by Sunday 12:00 noon for Monday meals</span>
+    </div>
+    <form id="bookingForm">
+        <div class="section">
+            <h3>Your Details</h3>
+            <label>Full Name</label>
+            <input type="text" id="name" required>
+            <label>Property / Accommodation</label>
+            <input type="text" id="property" required>
+            <label>Room Number</label>
+            <input type="text" id="room" required>
+            <label>Phone Number</label>
+            <input type="tel" id="phone" required placeholder="e.g. 07700 900123">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="your.email@example.com">
+        </div>
+        <div class="section">
+            <h3>Meal Choices</h3>
+            <div id="monSection">
+                <label>📅 Monday Choice</label>
+                <div class="meal-options">
+                    <div class="meal-option"><span class="meal-icon">🍗</span> 1. Chicken & Rice</div>
+                    <div class="meal-option"><span class="meal-icon">🍝</span> 2. Beef Pasta</div>
+                    <div class="meal-option veg"><span class="meal-icon">🥗</span> 3. Vegetable Curry & Rice</div>
+                </div>
+                <select id="monday">
+                    <option value="">— Not Ordering —</option>
+                    <option>1. Chicken & Rice</option>
+                    <option>2. Beef Pasta</option>
+                    <option class="veg">3. Vegetable Curry & Rice 🌿</option>
+                </select>
+                <p class="note deadline-note"></p>
+            </div>
+            <div id="wedSection">
+                <label>📅 Wednesday Choice</label>
+                <div class="meal-options">
+                    <div class="meal-option"><span class="meal-icon">🍖</span> 1. Lamb & Rice</div>
+                    <div class="meal-option"><span class="meal-icon">🍝</span> 2. Chicken Pasta</div>
+                    <div class="meal-option veg"><span class="meal-icon">🥗</span> 3. Vegetable Pasta</div>
+                </div>
+                <select id="wednesday">
+                    <option value="">— Not Ordering —</option>
+                    <option>1. Lamb & Rice</option>
+                    <option>2. Chicken Pasta</option>
+                    <option class="veg">3. Vegetable Pasta 🌿</option>
+                </select>
+                <p class="note deadline-note"></p>
+            </div>
+            <div id="friSection">
+                <label>📅 Friday Choice</label>
+                <div class="meal-options">
+                    <div class="meal-option"><span class="meal-icon">🍛</span> 1. Chicken Curry & Rice</div>
+                    <div class="meal-option"><span class="meal-icon">🌶️</span> 2. Beef Chilli & Rice</div>
+                    <div class="meal-option veg"><span class="meal-icon">🍛</span> 3. Chickpea Curry & Rice</div>
+                </div>
+                <select id="friday">
+                    <option value="">— Not Ordering —</option>
+                    <option>1. Chicken Curry & Rice</option>
+                    <option>2. Beef Chilli & Rice</option>
+                    <option class="veg">3. Chickpea Curry & Rice 🌿</option>
+                </select>
+                <p class="note deadline-note"></p>
+            </div>
+            <div id="satSection">
+                <label>📅 Saturday Choice</label>
+                <div class="meal-options">
+                    <div class="meal-option"><span class="meal-icon">🍗</span> 1. Roast Chicken Dinner</div>
+                    <div class="meal-option"><span class="meal-icon">🍛</span> 2. Lamb Curry & Rice</div>
+                    <div class="meal-option veg"><span class="meal-icon">🥧</span> 3. Vegetable Cottage Pie</div>
+                </div>
+                <select id="saturday">
+                    <option value="">— Not Ordering —</option>
+                    <option>1. Roast Chicken Dinner</option>
+                    <option>2. Lamb Curry & Rice</option>
+                    <option class="veg">3. Vegetable Cottage Pie 🌿</option>
+                </select>
+                <p class="note deadline-note"></p>
+            </div>
+        </div>
+        <div class="section">
+            <label>Allergies / Dietary Requirements</label>
+            <textarea id="allergies" rows="3" placeholder="Please list any allergies or special needs..."></textarea>
+        </div>
+
+        <!-- ========== REFERRAL SECTION — SEPARATE DISTINCT BOX ========== -->
+        <div class="referral-section">
+            <h3>🔎 Do you know someone who needs accommodation?</h3>
+            <div class="referral-note">
+                If you know anyone aged <strong>16–65</strong>, currently on <strong>Universal Credit</strong>, and looking for a place to stay — please let us know below.
+            </div>
+            <label class="referral-checkbox">
+                <input type="checkbox" id="knowsReferral" onchange="toggleReferralFields()">
+                ✅ Yes, I know someone who fits this description
+            </label>
+            <div class="referral-fields" id="referralFields">
+                <label>Person's Full Name</label>
+                <input type="text" id="referralName" placeholder="Enter full name...">
+                <label>Person's Contact Number</label>
+                <input type="tel" id="referralPhone" placeholder="e.g. 07700 900123">
+            </div>
+        </div>
+        <!-- ========== END OF REFERRAL SECTION ========== -->
+
+        <button type="submit">✅ Submit Booking</button>
+    </form>
+</div>
+<!-- ============= CONFIRMATION SCREEN ============= -->
+<div id="confirmationScreen">
+    <div class="confirmation-card">
+        <div class="icon">✅</div>
+        <h1>Booking Confirmed!</h1>
+        <div class="divider"></div>
+        <p>Thank you! Your meal booking has been submitted successfully.<br><br>We will confirm your order shortly. Meals are subject to availability.<br><br>You may now close this page.</p>
+    </div>
+</div>
+<script>
+// ==================================================
+const CURRENT_PASSWORD = "meals2026";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxFb24ZSQeHnH7ztgagUwBxpiFNp8cGj6Lkql5bLxqkurY6kh6RUmqs2YIPdRmqIkrY/exec";
+// ==================================================
+const passwordScreen = document.getElementById("passwordScreen");
+const mainContent = document.getElementById("mainContent");
+const confirmationScreen = document.getElementById("confirmationScreen");
+const passInput = document.getElementById("accessPassword");
+const unlockBtn = document.getElementById("unlockButton");
+const passMessage = document.getElementById("passMessage");
+// ========== TOGGLE REFERRAL FIELDS ==========
+function toggleReferralFields(){
+    const checkbox = document.getElementById("knowsReferral");
+    const fields = document.getElementById("referralFields");
+    fields.style.display = checkbox.checked ? "block" : "none";
+}
+// ========== UNLOCK FUNCTION ==========
+function attemptUnlock(){
+    passMessage.innerHTML = "";
+    const entered = passInput.value.trim();
+    if (entered === "") {
+        passMessage.innerHTML = "<span class='error'>⚠️ Please enter a password</span>";
+        return;
+    }
+    if (entered === CURRENT_PASSWORD) {
+        // ✅ CORRECT PASSWORD
+        passMessage.innerHTML = "<span class='success'>✅ Correct! Opening...</span>";
+        setTimeout(function(){
+            passwordScreen.style.display = "none";
+            mainContent.style.display = "block";
+            applyCutoff();
+        }, 600);
+    } else {
+        // ❌ WRONG PASSWORD
+        passMessage.innerHTML = "<span class='error'>❌ Incorrect password. Please try again.</span>";
+        passInput.value = "";
+    }
+}
+// Click button to unlock
+unlockBtn.addEventListener("click", attemptUnlock);
+// Press Enter/Go on keyboard to unlock
+passInput.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.key === "Go") {
+        e.preventDefault();
+        attemptUnlock();
+    }
+});
+// ========== FORM SUBMISSION ==========
+document.getElementById("bookingForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const knowsReferral = document.getElementById("knowsReferral").checked;
+    const orderData = {
+        name: document.getElementById("name").value,
+        property: document.getElementById("property").value,
+        room: document.getElementById("room").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value || "Not provided",
+        monday: document.getElementById("monday").value || "—",
+        wednesday: document.getElementById("wednesday").value || "—",
+        friday: document.getElementById("friday").value || "—",
+        saturday: document.getElementById("saturday").value || "—",
+        allergies: document.getElementById("allergies").value || "None",
+        knowsReferral: knowsReferral ? "Yes" : "No",
+        referralName: knowsReferral ? document.getElementById("referralName").value || "Not given" : "—",
+        referralPhone: knowsReferral ? document.getElementById("referralPhone").value || "Not given" : "—"
+    };
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(orderData)
+        });
+        mainContent.style.display = "none";
+        confirmationScreen.style.display = "block";
+    } catch (error) {
+        alert("⚠️ Something went wrong. Please try again or contact us.");
+        console.error(error);
+    }
+});
+// ========== CUTOFF LOGIC ==========
+function isBookingOpenFor(mealDayOffset, cutoffDayOffset) {
+    const now = new Date();
+    const deadline = new Date();
+    deadline.setHours(12, 0, 0, 0);
+    const currentDay = now.getDay();
+    let daysUntilMeal = (mealDayOffset - currentDay + 7) % 7;
+    let daysUntilCutoff = (cutoffDayOffset - currentDay + 7) % 7;
+    if (daysUntilCutoff === 0) return now < deadline;
+    return daysUntilCutoff > 0;
+}
+const mealRules = {
+    mon: {mealDay:1, cutoffDay:0, label:"Monday", cutoffLabel:"Sunday 12:00 noon"},
+    wed: {mealDay:3, cutoffDay:2, label:"Wednesday", cutoffLabel:"Tuesday 12:00 noon"},
+    fri: {mealDay:5, cutoffDay:4, label:"Friday", cutoffLabel:"Thursday 12:00 noon"},
+    sat: {mealDay:6, cutoffDay:5, label:"Saturday", cutoffLabel:"Friday 12:00 noon"},
+};
+function applyCutoff() {
+    const sections = [
+        {id:"mon", sectionId:"monSection", selectId:"monday"},
+        {id:"wed", sectionId:"wedSection", selectId:"wednesday"},
+        {id:"fri", sectionId:"friSection", selectId:"friday"},
+        {id:"sat", sectionId:"satSection", selectId:"saturday"},
+    ];
+    sections.forEach(s => {
+        const rule = mealRules[s.id];
+        const open = isBookingOpenFor(rule.mealDay, rule.cutoffDay);
+        const section = document.getElementById(s.sectionId);
+        const select = document.getElementById(s.selectId);
+        const note = section.querySelector(".deadline-note");
+        if (!open) {
+            select.disabled = true;
+            section.classList.add("closed");
+            note.innerHTML = "🔒 Bookings closed — deadline was " + rule.cutoffLabel;
+        } else {
+            note.innerHTML = "✅ Book by: " + rule.cutoffLabel;
+        }
+    });
+}
+</script>
+</body>
+</html>
