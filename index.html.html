@@ -226,7 +226,6 @@
             <label>Allergies / Dietary Requirements</label>
             <textarea id="allergies" rows="3" placeholder="Please list any allergies or special needs..."></textarea>
         </div>
-
         <!-- ========== REFERRAL SECTION — SEPARATE DISTINCT BOX ========== -->
         <div class="referral-section">
             <h3>🔎 Do you know someone who needs accommodation?</h3>
@@ -245,7 +244,6 @@
             </div>
         </div>
         <!-- ========== END OF REFERRAL SECTION ========== -->
-
         <button type="submit">✅ Submit Booking</button>
     </form>
 </div>
@@ -306,7 +304,7 @@ passInput.addEventListener("keydown", function(e){
         attemptUnlock();
     }
 });
-// ========== FORM SUBMISSION ==========
+// ========== FORM SUBMISSION — iPhone-compatible version ==========
 document.getElementById("bookingForm").addEventListener("submit", async function(e){
     e.preventDefault();
     const knowsReferral = document.getElementById("knowsReferral").checked;
@@ -325,15 +323,21 @@ document.getElementById("bookingForm").addEventListener("submit", async function
         referralName: knowsReferral ? document.getElementById("referralName").value || "Not given" : "—",
         referralPhone: knowsReferral ? document.getElementById("referralPhone").value || "Not given" : "—"
     };
+
     try {
+        const formData = new URLSearchParams();
+        Object.keys(orderData).forEach(key => {
+            formData.append(key, orderData[key]);
+        });
+
         await fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(orderData)
+            body: formData
         });
+
         mainContent.style.display = "none";
         confirmationScreen.style.display = "block";
+
     } catch (error) {
         alert("⚠️ Something went wrong. Please try again or contact us.");
         console.error(error);
